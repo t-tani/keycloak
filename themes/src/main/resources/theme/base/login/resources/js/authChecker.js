@@ -6,12 +6,12 @@ let timeout;
 
 // Remove the timeout when unloading to avoid execution of the
 // checkCookiesAndSetTimer when the page is already submitted
-// addEventListener("beforeunload", () => {
-//   if (timeout) {
-//     clearTimeout(timeout);
-//     timeout = undefined;
-//   }
-// });
+addEventListener("beforeunload", () => {
+  if (timeout) {
+    clearTimeout(timeout);
+    timeout = undefined;
+  }
+});
 
 export function checkCookiesAndSetTimer(loginRestartUrl) {
   if (initialSession) {
@@ -29,9 +29,7 @@ export function checkCookiesAndSetTimer(loginRestartUrl) {
     );
   } else {
     // Redirect to the login restart URL. This can typically automatically login user due the SSO
-    if (getCookieByName("KC_RESTART")) {
-      location.href = loginRestartUrl;
-    }
+    location.href = loginRestartUrl;
   }
 }
 
