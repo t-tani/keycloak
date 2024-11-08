@@ -3,6 +3,7 @@ const AUTH_SESSION_TIMEOUT_MILLISECS = 1000;
 const initialSession = getSession();
 
 let timeout;
+let hasCookieRestart = false;
 
 // Remove the timeout when unloading to avoid execution of the
 // checkCookiesAndSetTimer when the page is already submitted
@@ -22,6 +23,10 @@ export function checkCookiesAndSetTimer(loginRestartUrl) {
   const session = getSession();
   const cookieRestart = getRestart();
 
+  if (cookieRestart){
+    hasCookieRestart = true;
+  }
+
   if (!session) {
     // The session is not present, check again later.
     timeout = setTimeout(
@@ -30,7 +35,7 @@ export function checkCookiesAndSetTimer(loginRestartUrl) {
     );
   } else {
     // Redirect to the login restart URL. This can typically automatically login user due the SSO
-    if (cookieRestart) {
+    if (cookieRestart || !hasCookieRestart) {
       location.href = loginRestartUrl;
     }
   }
@@ -58,11 +63,8 @@ function getRestart(){
 }
 
 function getCookieByName(name) {
-  if (!document.cookie) return null;
   for (const cookie of document.cookie.split(";")) {
-    const parts = cookie.split("=").map((part) => part.trim());
-    const key = parts[0];
-    const value = parts[1] || "";
+    const [key, value] = cookie.split("=").map((value) => value.trim());
     if (key === name) {
       return value.startsWith('"') && value.endsWith('"')
         ? value.slice(1, -1)
