@@ -1,10 +1,9 @@
 const CHECK_INTERVAL_MILLISECS = 2000;
 const AUTH_SESSION_TIMEOUT_MILLISECS = 1000;
 const initialSession = getSession();
+const initialKcRestart = getKcRestart();
 
 let timeout;
-let hasCookieRestart = false;
-
 // Remove the timeout when unloading to avoid execution of the
 // checkCookiesAndSetTimer when the page is already submitted
 addEventListener("beforeunload", () => {
@@ -21,11 +20,6 @@ export function checkCookiesAndSetTimer(loginRestartUrl) {
   }
 
   const session = getSession();
-  const cookieRestart = getRestart();
-
-  if (cookieRestart){
-    hasCookieRestart = true;
-  }
 
   if (!session) {
     // The session is not present, check again later.
@@ -35,7 +29,7 @@ export function checkCookiesAndSetTimer(loginRestartUrl) {
     );
   } else {
     // Redirect to the login restart URL. This can typically automatically login user due the SSO
-    if (cookieRestart || !hasCookieRestart) {
+    if (getKcRestart() || initialKcRestart === getKcRestart()) {
       location.href = loginRestartUrl;
     }
   }
@@ -58,7 +52,7 @@ function getSession() {
   return getCookieByName("KEYCLOAK_SESSION");
 }
 
-function getRestart(){
+function getKcRestart(){
   return getCookieByName("KC_RESTART");
 }
 

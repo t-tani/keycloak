@@ -15,7 +15,7 @@ public final class CookieType {
             .build();
 
     public static final CookieType AUTH_RESTART = CookieType.create("KC_RESTART")
-            .scope(CookieScope.FEDERATION)
+            .scope(CookieScope.FEDERATION_JS)
             .defaultMaxAge(CookieMaxAge.SESSION)
             .build();
 
