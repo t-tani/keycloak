@@ -18,10 +18,6 @@ export function checkCookiesAndSetTimer(loginRestartUrl) {
     // We started with a session, so there is nothing to do, exit.
     return;
   }
-  if (!loginRestartUrl) {
-    // No KC_RESTART cookie, so there is nothing to do, exit.
-    return;
-  }
 
   const session = getSession();
   const cookieRestart = getRestart();
@@ -62,8 +58,11 @@ function getRestart(){
 }
 
 function getCookieByName(name) {
+  if (!document.cookie) return null;
   for (const cookie of document.cookie.split(";")) {
-    const [key, value] = cookie.split("=").map((value) => value.trim());
+    const parts = cookie.split("=").map((part) => part.trim());
+    const key = parts[0];
+    const value = parts[1] || "";
     if (key === name) {
       return value.startsWith('"') && value.endsWith('"')
         ? value.slice(1, -1)
