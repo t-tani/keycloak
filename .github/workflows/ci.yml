@@ -951,10 +951,10 @@ jobs:
   #         job-name: Migration Tests
 
   #     - name: Surefire reports
-        if: always()
-        uses: ./.github/actions/archive-surefire-reports
-        with:
-          job-id: migration-tests-${{ matrix.old-version }}-${{ matrix.database }}
+        # if: always()
+        # uses: ./.github/actions/archive-surefire-reports
+        # with:
+        #   job-id: migration-tests-${{ matrix.old-version }}-${{ matrix.database }}
 
   # test-framework:
   #   name: Test Framework
