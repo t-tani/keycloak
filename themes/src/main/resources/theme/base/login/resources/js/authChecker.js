@@ -18,6 +18,10 @@ export function checkCookiesAndSetTimer(loginRestartUrl) {
     // We started with a session, so there is nothing to do, exit.
     return;
   }
+  if (!loginRestartUrl) {
+    // No KC_RESTART cookie, so there is nothing to do, exit.
+    return;
+  }
 
   const session = getSession();
   const cookieRestart = getRestart();
