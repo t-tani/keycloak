@@ -67,7 +67,7 @@ jobs:
         if: github.event_name == 'pull_request' && startsWith(github.event.pull_request.base.ref, 'release/')
         run: git diff --name-only --exit-code -- "**/proto.lock"
 
-  unit-tests:
+  #  unit-tests:
   #   name: Base UT
   #   runs-on: ubuntu-latest
   #   needs: build
