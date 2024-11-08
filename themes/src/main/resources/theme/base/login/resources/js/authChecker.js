@@ -20,6 +20,7 @@ export function checkCookiesAndSetTimer(loginRestartUrl) {
   }
 
   const session = getSession();
+  const cookieRestart = getRestart();
 
   if (!session) {
     // The session is not present, check again later.
@@ -29,7 +30,9 @@ export function checkCookiesAndSetTimer(loginRestartUrl) {
     );
   } else {
     // Redirect to the login restart URL. This can typically automatically login user due the SSO
-    location.href = loginRestartUrl;
+    if (cookieRestart) {
+      location.href = loginRestartUrl;
+    }
   }
 }
 
@@ -48,6 +51,10 @@ function getKcAuthSessionHash() {
 
 function getSession() {
   return getCookieByName("KEYCLOAK_SESSION");
+}
+
+function getRestart(){
+  return getCookieByName("KC_RESTART");
 }
 
 function getCookieByName(name) {
